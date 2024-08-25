@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bajaj Finserv Challenge
-    </title>
+    <title>Bajaj Finserv Challenge</title>
     <link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file -->
 </head>
 <body>
@@ -17,7 +16,7 @@
         <div class="filter-container">
             <label for="filterOptions">Select Options to Display:</label>
             <select id="filterOptions" onchange="handleFilterChange()">
-                <option value="">-- Select an option --</option> <!-- Default empty option -->
+                <option value="">-- Select an option --</option>
                 <option value="numbers">Numbers</option>
                 <option value="alphabets">Alphabets</option>
                 <option value="highest_lowercase_alphabet">Highest Lowercase Alphabet</option>
@@ -57,7 +56,7 @@
         async function handleSubmit() {
             try {
                 const data = JSON.parse(jsonInput.value);
-                const response = await fetch('http://localhost:5000/bfhl', {
+                const response = await fetch('/api/bfhl', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -85,12 +84,10 @@
 
         function handleFilterChange() {
             const selectedOption = document.getElementById('filterOptions').value;
-            // Hide all containers initially
             document.getElementById('numbers-container').style.display = 'none';
             document.getElementById('alphabets-container').style.display = 'none';
             document.getElementById('highest-lowercase-container').style.display = 'none';
 
-            // Show the selected container if an option is selected
             if (selectedOption === 'numbers') {
                 document.getElementById('numbers-container').style.display = 'block';
             } else if (selectedOption === 'alphabets') {
