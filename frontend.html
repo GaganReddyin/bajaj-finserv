@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bajaj Finserv Challenge
+    </title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1>API input</h1>
+        <textarea id="jsonInput" rows="4" cols="50" placeholder='Enter JSON here, e.g., {"data": ["A", "C", "z"]}'></textarea>
+        <br>
+        <button id="submitButton" onclick="handleSubmit()">Submit</button>
+        
+        <div class="filter-container">
+            <label for="filterOptions">Select Options to Display:</label>
+            <select id="filterOptions" onchange="handleFilterChange()">
+                <option value="">-- Select an option --</option> <!-- Default empty option -->
+                <option value="numbers">Numbers</option>
+                <option value="alphabets">Alphabets</option>
+                <option value="highest_lowercase_alphabet">Highest Lowercase Alphabet</option>
+            </select>
+        </div>
+
+        <div id="response" style="display: none;">
+            <h2>Response</h2>
+            <p>User ID: <span id="user_id"></span></p>
+            <p>Email: <span id="email"></span></p>
+            <p>Roll Number: <span id="roll_number"></span></p>
+            <div id="numbers-container" style="display: none;">
+                <h3>Numbers</h3>
+                <p id="numbers"></p>
+            </div>
+            <div id="alphabets-container" style="display: none;">
+                <h3>Alphabets</h3>
+                <p id="alphabets"></p>
+            </div>
+            <div id="highest-lowercase-container" style="display: none;">
+                <h3>Highest Lowercase Alphabet</h3>
+                <p id="highest-lowercase"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const jsonInput = document.getElementById('jsonInput');
+        const responseDiv = document.getElementById('response');
+        const user_idSpan = document.getElementById('user_id');
+        const emailSpan = document.getElementById('email');
+        const roll_numberSpan = document.getElementById('roll_number');
+        const numbersSpan = document.getElementById('numbers');
+        const alphabetsSpan = document.getElementById('alphabets');
+        const highestLowercaseSpan = document.getElementById('highest-lowercase');
+
+        async function handleSubmit() {
+            try {
+                const data = JSON.parse(jsonInput.value);
+                const response = await fetch('http://localhost:5000/bfhl', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                displayResponse(result);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Invalid JSON input or server error.');
+            }
+        }
+
+        function displayResponse(data) {
+            user_idSpan.textContent = data.user_id;
+            emailSpan.textContent = data.email;
+            roll_numberSpan.textContent = data.roll_number;
+            numbersSpan.textContent = data.numbers.join(', ');
+            alphabetsSpan.textContent = data.alphabets.join(', ');
+            highestLowercaseSpan.textContent = data.highest_lowercase_alphabet.join(', ');
+            responseDiv.style.display = 'block';
+        }
+
+        function handleFilterChange() {
+            const selectedOption = document.getElementById('filterOptions').value;
+            // Hide all containers initially
+            document.getElementById('numbers-container').style.display = 'none';
+            document.getElementById('alphabets-container').style.display = 'none';
+            document.getElementById('highest-lowercase-container').style.display = 'none';
+
+            // Show the selected container if an option is selected
+            if (selectedOption === 'numbers') {
+                document.getElementById('numbers-container').style.display = 'block';
+            } else if (selectedOption === 'alphabets') {
+                document.getElementById('alphabets-container').style.display = 'block';
+            } else if (selectedOption === 'highest_lowercase_alphabet') {
+                document.getElementById('highest-lowercase-container').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
