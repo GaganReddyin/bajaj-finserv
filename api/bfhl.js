@@ -48,3 +48,4 @@ const handler = (req, res) => {
 };
 
 export default cors()(handler);
+ 
