@@ -1,6 +1,6 @@
 // api/bfhl.js
 
-const cors = require('cors');
+const cors = require('cors');               
 
 const handler = (req, res) => {
   if (req.method === 'POST') {
